@@ -212,6 +212,21 @@
     background: #bdc3c7;
     cursor: not-allowed;
   }
+
+  footer {
+    color: d4b192;
+    text-align: center;
+    padding: 20px;
+    font-size: 1em;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+  }
+  
+  /* Adiciona um espaçamento para os elementos do footer */
+  footer p {
+    margin: 0;
+  }
   
   /* Responsividade */
   @media (max-width: 768px) {
