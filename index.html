@@ -5,113 +5,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tabuleiro Quântico</title>
-  <meta name="description" content="Jogo interativo sobre consciência e energia no contexto quântico.">
-  <meta name="keywords" content="quântico, consciência, energia, jogo, interatividade, ciência, espiritualidade">
+  <meta name="description" content="Descubra os significados dos planetas e o posicionamento dos astros.">
+  <meta name="keywords" content="mapa astral, astrologia, signos, planetas, cosmos, horóscopo">
   <meta name="author" content="Alexandre Ventura">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-  <!-- Cabeçalho com navegação -->
+  <nav class="menu">
+    <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a>
+    <a href="https://alexxanorafa.github.io/posicionamentodosastros/" class="menu-item">Mapa Astral</a>
+    <a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a>
+    <a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas do Destino</a>
+    <a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a>
+  </nav>
+
   <header>
-    <nav class="menu">
-      <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a>
-      <a href="https://alexxanorafa.github.io/posicionamentodosastros/" class="menu-item">Mapa Astral</a>
-      <a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a>
-      <a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas do Destino</a>
-      <a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a>
-    </nav>
-    <h1>Tabuleiro Quântico</h1>
+    <h2>Bem-vindo ao Tabuleiro Quântico!</h2>
+    <p>Clica em "Iniciar Jogo" para formar palavras e desvendar mensagens do campo quântico.</p>
   </header>
 
   <main>
-    <section id="quantum-game">
-      <h2>Bem-vindo ao Tabuleiro Quântico!</h2>
-      <p>Clica em "Iniciar Jogo" para formar palavras e desvendar mensagens do campo quântico.</p>
-      <button id="start-game-btn">Iniciar Jogo</button>
+    <div id="current-word-display">Palavra:</div>
+    <div id="score-display">Pontuação: 0</div>
 
-      <!-- Tabuleiro -->
-      <div id="quantum-board" class="hidden">
-        <!-- Letras do tabuleiro -->
-        <div class="board-row">
-          <button class="board-cell">A</button>
-          <button class="board-cell">B</button>
-          <button class="board-cell">C</button>
-          <button class="board-cell">D</button>
-          <button class="board-cell">E</button>
-        </div>
-        <div class="board-row">
-          <button class="board-cell">F</button>
-          <button class="board-cell">G</button>
-          <button class="board-cell">H</button>
-          <button class="board-cell">I</button>
-          <button class="board-cell">J</button>
-        </div>
-        <div class="board-row">
-          <button class="board-cell">K</button>
-          <button class="board-cell">L</button>
-          <button class="board-cell">M</button>
-          <button class="board-cell">N</button>
-          <button class="board-cell">O</button>
-        </div>
-        <div class="board-row">
-          <button class="board-cell">P</button>
-          <button class="board-cell">Q</button>
-          <button class="board-cell">R</button>
-          <button class="board-cell">S</button>
-          <button class="board-cell">T</button>
-        </div>
-        <div class="board-row">
-          <button class="board-cell">U</button>
-          <button class="board-cell">V</button>
-          <button class="board-cell">W</button>
-          <button class="board-cell">X</button>
-          <button class="board-cell">Y</button>
-          <button class="board-cell">Z</button>
-        </div>
-        <div class="board-row">
-          <button class="board-cell">0</button>
-          <button class="board-cell">1</button>
-          <button class="board-cell">2</button>
-          <button class="board-cell">3</button>
-          <button class="board-cell">4</button>
-          <button class="board-cell">5</button>
-          <button class="board-cell">6</button>
-          <button class="board-cell">7</button>
-          <button class="board-cell">8</button>
-          <button class="board-cell">9</button>
-        </div>
-        <div class="board-row">
-          <button class="board-cell special-cell">Sim</button>
-          <button class="board-cell special-cell">Não</button>
-          <button class="board-cell special-cell">Adeus</button>
-        </div>
-      </div>
+    <div id="letter-container"></div>
+    <div id="game-board"></div>
 
-      <!-- Feedback e controles -->
-      <p id="word-message" class="hidden">Escolhe letras para formar palavras.</p>
-      
-      <!-- Exibição da palavra atual -->
-      <div id="current-word" class="hidden">
-        Palavra atual: <span id="word-display"></span>
-      </div>
-      
-      <!-- Botão para submeter palavra (não usado diretamente no seu código, mas incluído) -->
-      <button id="submit-word-btn" class="hidden">Submeter Palavra</button>
-      
-      <!-- Botão para reiniciar o jogo -->
-      <button id="reset-game-btn" class="hidden">Reiniciar Jogo</button>
-
-      <!-- Exibição da pontuação -->
-      <p id="score" class="hidden">Pontuação: <span id="score-value">0</span></p>
-    </section>
+    <div>
+      <button id="submit-word">Submeter Palavra</button>
+      <button id="delete-last">Apagar Última Letra</button>
+      <button id="reset-word">Resetar Palavra</button>
+    </div>
   </main>
 
   <footer>
-    <p>© 2025 Consciência Quântica.</p>
+    <p>© 2025 Tabuleiro Quântico</p>
   </footer>
 
-  <script src="scripts.js"></script>
+  <script src="script.js"></script>
 </body>
 
 </html>
