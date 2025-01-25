@@ -16,6 +16,7 @@
   
   /* Cabeçalho */
   header {
+    margin-top: 40px; /* Aumentei a margem superior para separar o título do menu */
     margin-bottom: 20px;
   }
   
