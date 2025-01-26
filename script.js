@@ -15,6 +15,11 @@ const letters = [
   "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 ];
 
+// Pontuação de cada letra, de acordo com o Scrabble
+const letterScores = {
+  A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, K: 5, L: 1, M: 3, N: 1, O: 1, P: 3, Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10
+};
+
 // Função para criar o tabuleiro
 document.addEventListener("DOMContentLoaded", () => {
   generateBoard();
@@ -62,7 +67,7 @@ function resetWord() {
 function submitWord() {
   if (currentWord.length > 0) {
     alert(`Palavra enviada: ${currentWord}`);
-    updateScore(currentWord.length);
+    updateScore(currentWord); // Atualiza a pontuação com base na palavra
     resetWord();
   } else {
     alert("Nenhuma palavra formada!");
@@ -70,7 +75,11 @@ function submitWord() {
 }
 
 // Atualizar pontuação
-function updateScore(points) {
+function updateScore(word) {
+  let points = 0;
+  for (let letter of word) {
+    points += letterScores[letter.toUpperCase()] || 0; // Atribui a pontuação com base na letra
+  }
   score += points;
   scoreDisplay.textContent = `Pontuação: ${score}`;
 }
