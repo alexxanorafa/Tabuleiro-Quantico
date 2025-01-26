@@ -21,27 +21,53 @@
   </nav>
 
   <header>
-    <h2>Bem-vindo ao Tabuleiro Quântico!</h2>
-    <p>Clica em "Iniciar Jogo" para formar palavras e desvendar mensagens do campo quântico.</p>
+    <h2>🔮 Bem-vindo ao Tabuleiro Quântico!</h2>
+    <p>
+      🌌 Clica em <strong>"Iniciar Jogo"</strong> para formar palavras e desvendar mensagens do campo quântico. ✨
+    </p>
   </header>
+  
 
   <main>
-    <div id="current-word">Palavra:</div>
-    <div id="score-display">Pontuação: 0</div>
-
-    <div id="letter-container"></div>
-    <div id="game-board"></div>
-
-    <div>
+    <!-- Palavra Atual -->
+    <section id="current-word-display">
+      <span>Palavra Atual: <strong id="current-word">_</strong></span>
+    </section>
+  
+    <!-- Pontuação -->
+    <section id="score-display">
+      Pontuação: <strong>0</strong>
+    </section>
+  
+    <!-- Tabuleiro de Letras (Teclado) -->
+    <section id="letter-container">
+      <!-- Teclado dividido em linhas -->
+      <div class="letter-row" id="row-1"></div>
+      <div class="letter-row" id="row-2"></div>
+      <div class="letter-row" id="row-3"></div>
+    </section>
+  
+    <!-- Tabuleiro de Resultados -->
+    <section id="game-board">
+      <!-- As células do tabuleiro serão adicionadas dinamicamente aqui -->
+    </section>
+  
+    <!-- Botões de Controle -->
+    <section id="control-buttons">
       <button id="submit-word">Submeter Palavra</button>
       <button id="delete-last">Apagar Última Letra</button>
       <button id="reset-word">Resetar Palavra</button>
-    </div>
+    </section>
   </main>
+  
 
-  <footer>
-    <p>© 2025 Tabuleiro Quântico</p>
-  </footer>
+<footer>
+  <div class="footer-buttons">
+    <button id="start-game">Iniciar Jogo</button>
+    <button id="pause-game">Pausar Jogo</button>
+    <button id="reset-game">Resetar Jogo</button>
+  </div>
+</footer>
 
   <script src="script.js"></script>
 </body>
