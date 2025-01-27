@@ -128,7 +128,7 @@ main {
   background: linear-gradient(135deg, #282c34, #2c3e50);
   border-radius: 10px;
   padding: 10px;
-  max-width: 400px;
+  max-width: 600px;
   margin: 10px auto;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.1);
   overflow: hidden;
@@ -194,36 +194,42 @@ main {
 #current-word-display {
   font-size: 1.0em;
   font-weight: bold;
-  color: #d4b192;
+  color: linear-gradient(135deg, #2c3e50, #d4b192);
   margin: 5px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
   letter-spacing: 0.1em;
 }
 
 #score-display {
-  font-size: 1.0em;
-  font-style: italic;
-  color: #d4b192;
-  margin-bottom: 10px;
-}
-
-/* Botões */
-button {
   background: linear-gradient(135deg, #2c3e50, #d4b192);
   color: #d4b192;
   font-family: 'Times New Roman', serif;
   font-size: 0.8em;
   padding: 5px 10px;
-  border: 2px solid #2c3e50;
-  border-radius: 5px;
+  border: 1px solid #2c3e50;
+  border-radius: 0px;
   cursor: pointer;
   transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 5px 10px linear-gradient(135deg, #2c3e50, #d4b192);
+}
+
+/* Botões */
+button {
+  background: linear-gradient(135deg, #FFFFFF, #d4b192);
+  color: #2c3e50;
+  font-family: 'Times New Roman', serif;
+  font-size: 0.8em;
+  padding: 5px 10px;
+  border: 0px solid #d4b192;
+  border-radius: 0px;
+  cursor: pointer;
+  transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
+  box-shadow: 0 5px 10px linear-gradient(135deg, #FFFFFF, #d4b192);
 }
 
 button:hover {
   transform: scale(1.1);
-  background: #2c3e50;
+  background: linear-gradient(135deg, #d4b192, #2c3e50);;
   color: #d4b192;
 }
 
