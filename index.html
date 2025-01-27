@@ -18,59 +18,55 @@
     <a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a>
     <a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas do Destino</a>
     <a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a>
-    <a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quantico</a>
   </nav>
 
   <header>
     <h2>🔮 Bem-vindo ao Tabuleiro Quântico!</h2>
     <p>
-      🌌 Clica em <strong>"Iniciar Jogo"</strong> para formar palavras e desvendar mensagens do campo quântico. ✨
+      🌌 Clique em <strong>"Iniciar Jogo"</strong> para formar palavras e desvendar mensagens do campo quântico. ✨
     </p>
   </header>
-  
 
   <main>
-        <!-- Botões de Controle -->
-        <section id="control-buttons">
-          <div class="footer-buttons">
-            <button id="start-game">Iniciar Jogo</button>
-            <button id="pause-game">Pausar Jogo</button>
-            <button id="reset-game">Resetar Jogo</button>
-          </div>
-        </section>
-    <!-- Palavra Atual -->
+    <section id="clocks">
+      <svg id="left-clock" width="50" height="50" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="45" stroke="black" stroke-width="2" fill="none" />
+        <line x1="50" y1="50" x2="50" y2="15" class="hour-hand" stroke="black" stroke-width="2" />
+        <line x1="50" y1="50" x2="50" y2="5" class="minute-hand" stroke="black" stroke-width="1" />
+      </svg>
+    </section>
+    
+
+    <section id="control-buttons">
+      <div class="footer-buttons">
+        <button id="start-game">Iniciar Jogo</button>
+        <button id="pause-game">Pausar Jogo</button>
+        <button id="reset-game">Resetar Jogo</button>
+      </div>
+    </section>
+
     <section id="current-word-display">
-      <span>Palavra Atual: <strong id="current-word">_</strong></span>
+      <p>Palavra Atual: <strong id="current-word">_</strong></p>
     </section>
-  
-    <!-- Pontuação -->
-    <section id="score-display">
-      Pontuação: <strong>0</strong>
+
+    <section id="score-container">
+      <p id="score-display">Pontuação: <strong>0</strong></p>
     </section>
-  
-    <!-- Tabuleiro de Letras (Teclado) -->
-    <section id="letter-container">
-      <!-- Teclado dividido em linhas -->
-      <div class="letter-row" id="row-1"></div>
-      <div class="letter-row" id="row-2"></div>
-      <div class="letter-row" id="row-3"></div>
-    </section>
-  
-    <!-- Tabuleiro de Resultados -->
+
     <section id="game-board">
-      <!-- As células do tabuleiro serão adicionadas dinamicamente aqui -->
+      <!-- O tabuleiro será preenchido dinamicamente pelo script -->
+    </section>
 
+    <section id="word-actions">
+      <button id="submit-word">Enviar Palavra</button>
+      <button id="delete-last">Apagar Última Letra</button>
+      <button id="reset-word">Resetar Palavra</button>
+    </section>
   </main>
-  
 
-<footer>
-          <!-- Botões de Controle -->
-          <section id="control-buttons">
-            <button id="submit-word">Submeter Palavra</button>
-            <button id="delete-last">Apagar Última Letra</button>
-            <button id="reset-word">Resetar Palavra</button>
-          </section>
-</footer>
+  <footer>
+
+  </footer>
 
   <script src="script.js"></script>
 </body>
