@@ -16,20 +16,24 @@ body {
 
 /* Cabeçalho */
 header {
-  margin-top: 40px;
-  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 1.0em;
+  margin-bottom: 10px;
+  text-shadow: 1px 1px 2px #d4b192;
+  margin-top: 80px;
+  margin-bottom: 40px;
 }
 
 h1 {
-  font-size: 2em;
+  font-size: 1.2em;
   color: #2c3e50;
-  text-shadow: 1px 1px 2px #2c3e50;
+  text-shadow: 2px 2px 2px #2c3e50;
 }
 
 h2 {
   color: #d4b192;
-  font-size: 2em;
-  margin-bottom: 20px;
+  font-size: 1.0em;
+  margin-bottom: 10px;
   text-shadow: 1px 1px 2px #2c3e50;
 }
 
@@ -41,7 +45,8 @@ h2 {
   align-items: center;
   padding: 5px 0;
   width: 100%;
-  background: transparent;
+  background: transparent; /* Remove o fundo específico */
+  box-shadow: transparent; /* Remove o box-shadow */
 }
 
 .menu-list {
@@ -49,7 +54,7 @@ h2 {
   padding: 0;
   margin: 0;
   display: flex;
-  gap: 14px;
+  gap: 5px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -63,7 +68,7 @@ h2 {
   justify-content: center;
   text-decoration: none;
   color: #2c3e50;
-  font-size: 0.75em;
+  font-size: 0.9em;
   font-weight: 250;
   padding: 0 8px;
   cursor: pointer;
@@ -99,28 +104,33 @@ h2 {
   left: 0;
 }
 
+.hour-hand, .minute-hand {
+  transform-origin: center center;
+  transition: transform 0.5s ease-out;
+}
+
 /* Contêiner principal */
 main {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 10px;
   flex-grow: 1;
 }
 
 /* Tabuleiro Ouija - Estilo Místico */
 #game-board {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(9, 2fr);
   gap: 5px;
   position: relative;
   background: linear-gradient(135deg, #282c34, #2c3e50);
   border-radius: 10px;
-  padding: 15px;
-  max-width: 600px;
+  padding: 10px;
+  max-width: 400px;
   margin: 10px auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.1);
   overflow: hidden;
   animation: quantum-glow 3s infinite;
   transform: translateZ(0);
@@ -133,7 +143,7 @@ main {
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.0em;
+  font-size: 0.9em;
   color: #d4b192;
 }
 
@@ -143,7 +153,7 @@ main {
   bottom: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.1em;
+  font-size: 0.9em;
   color: #d4b192;
 }
 
@@ -154,10 +164,10 @@ main {
   justify-content: center;
   background: linear-gradient(135deg, #2c3e50, #d4b192);
   color: #d4b192;
-  font-size: 1.2em;
+  font-size: 1.0em;
   font-weight: bold;
-  width: 45px;
-  height: 45px;
+  width: 30px;
+  height: 30px;
   border-radius: 10%;
   cursor: pointer;
   transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
@@ -169,7 +179,7 @@ main {
   transform: scale(1.2);
   background: #d4b192;
   color: #2c3e50;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), inset 0 5px 10px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.6), inset 0 5px 10px rgba(255, 255, 255, 0.3);
 }
 
 /* Letras selecionadas */
@@ -182,19 +192,19 @@ main {
 
 /* Texto decorativo */
 #current-word-display {
-  font-size: 1.2em;
+  font-size: 1.0em;
   font-weight: bold;
   color: #d4b192;
-  margin: 10px 0;
+  margin: 5px 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
   letter-spacing: 0.1em;
 }
 
 #score-display {
-  font-size: 1.2em;
+  font-size: 1.0em;
   font-style: italic;
   color: #d4b192;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 /* Botões */
@@ -202,8 +212,8 @@ button {
   background: linear-gradient(135deg, #2c3e50, #d4b192);
   color: #d4b192;
   font-family: 'Times New Roman', serif;
-  font-size: 1em;
-  padding: 10px 20px;
+  font-size: 0.8em;
+  padding: 5px 10px;
   border: 2px solid #2c3e50;
   border-radius: 5px;
   cursor: pointer;
@@ -221,11 +231,24 @@ button:hover {
 footer {
   color: #d4b192;
   text-align: center;
-  padding: 20px;
+  padding: 10px;
   font-size: 1em;
-  width: 100%;
+  width: 50%;
   position: relative;
   bottom: 0;
+}
+
+/* Classe de shake para feedback */
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
 }
 
 /* Responsividade */
