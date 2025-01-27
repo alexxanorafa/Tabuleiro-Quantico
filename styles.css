@@ -113,13 +113,13 @@ main {
 #game-board {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 15px;
+  gap: 5px;
   position: relative;
   background: linear-gradient(135deg, #282c34, #2c3e50);
-  border-radius: 20px;
-  padding: 30px;
-  max-width: 800px;
-  margin: 20px auto;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 600px;
+  margin: 10px auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 2px 5px rgba(255, 255, 255, 0.1);
   overflow: hidden;
   animation: quantum-glow 3s infinite;
@@ -133,7 +133,7 @@ main {
   top: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.2em;
+  font-size: 1.0em;
   color: #d4b192;
 }
 
@@ -143,7 +143,7 @@ main {
   bottom: -20px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 1.2em;
+  font-size: 1.1em;
   color: #d4b192;
 }
 
@@ -154,10 +154,10 @@ main {
   justify-content: center;
   background: linear-gradient(135deg, #2c3e50, #d4b192);
   color: #d4b192;
-  font-size: 1.8em;
+  font-size: 1.2em;
   font-weight: bold;
-  width: 60px;
-  height: 60px;
+  width: 45px;
+  height: 45px;
   border-radius: 10%;
   cursor: pointer;
   transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
@@ -182,7 +182,7 @@ main {
 
 /* Texto decorativo */
 #current-word-display {
-  font-size: 1.8em;
+  font-size: 1.2em;
   font-weight: bold;
   color: #d4b192;
   margin: 10px 0;
@@ -191,7 +191,7 @@ main {
 }
 
 #score-display {
-  font-size: 1.5em;
+  font-size: 1.2em;
   font-style: italic;
   color: #d4b192;
   margin-bottom: 20px;
