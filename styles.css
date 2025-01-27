@@ -260,13 +260,13 @@ footer {
 /* Responsividade */
 @media (max-width: 768px) {
   #game-board {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
 @media (max-width: 480px) {
   #game-board {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
 
   .board-cell {
