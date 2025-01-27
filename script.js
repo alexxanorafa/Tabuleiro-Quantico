@@ -1,40 +1,95 @@
-// JavaScript - Tabuleiro Quântico
-
-// Elementos do DOM
-const gameBoard = document.getElementById("game-board");
-const currentWordDisplay = document.getElementById("current-word");
-const submitButton = document.getElementById("submit-word");
-const deleteButton = document.getElementById("delete-last");
-const resetButton = document.getElementById("reset-word");
-const scoreDisplay = document.getElementById("score-display");
-
-// Variáveis de controle
+// Configurações e Variáveis Globais
+let timer = 30; // Tempo inicial em segundos
+let intervalId = null;
 let currentWord = "";
 let score = 0;
-const letters = [
-  "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-];
 
-// Pontuação de cada letra, de acordo com o Scrabble
+const validWords = ["TEST", "GAME", "CODE", "WORD", "PLAY"];
+const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const letterScores = {
-  A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, K: 5, L: 1, M: 3, N: 1, O: 1, P: 3, Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10
+  A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1, J: 8, K: 5, L: 1, M: 3,
+  N: 1, O: 1, P: 3, Q: 10, R: 1, S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10
 };
 
-// Função para criar o tabuleiro
+// Elementos do DOM
+let gameBoard, currentWordDisplay, scoreDisplay, timerDisplay, digitalClock;
+
 document.addEventListener("DOMContentLoaded", () => {
+  // Inicializar elementos do DOM
+  gameBoard = document.getElementById("game-board");
+  currentWordDisplay = document.getElementById("current-word");
+  scoreDisplay = document.getElementById("score-display");
+  timerDisplay = document.getElementById("timer");
+  digitalClock = document.getElementById("digital-clock");
+
+  // Configurar eventos
+  document.getElementById("start-game").addEventListener("click", startGame);
+  document.getElementById("pause-game").addEventListener("click", pauseGame);
+  document.getElementById("reset-game").addEventListener("click", resetGame);
+  document.getElementById("submit-word").addEventListener("click", submitWord);
+  document.getElementById("reset-word").addEventListener("click", resetWord);
+
+  // Inicializar tabuleiro
   generateBoard();
+
+  // Atualizar relógio digital
+  updateDigitalClock();
 });
 
-function generateBoard() {
-  gameBoard.innerHTML = ""; // Limpar tabuleiro
+function startGame() {
+  resetGame();
+  intervalId = setInterval(updateTimer, 1000);
+}
 
+function pauseGame() {
+  clearInterval(intervalId);
+}
+
+function resetGame() {
+  clearInterval(intervalId);
+  timer = 30;
+  score = 0;
+  if (timerDisplay) timerDisplay.textContent = formatTime(timer);
+  if (scoreDisplay) scoreDisplay.textContent = "Pontuação: 0";
+  resetWord();
+  updateBoardHighlight();
+}
+
+function updateTimer() {
+  if (timer > 0) {
+    timer--;
+    if (timerDisplay) timerDisplay.textContent = formatTime(timer);
+
+    // Atualizar animação do relógio com base no tempo restante
+    animateClock("left-clock", true, timer);
+    animateClock("right-clock", false, timer);
+  } else {
+    clearInterval(intervalId);
+    alert("⏰ Tempo esgotado!");
+  }
+}
+
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60).toString().padStart(2, "0");
+  const remainingSeconds = (seconds % 60).toString().padStart(2, "0");
+  return `${minutes}:${remainingSeconds}`;
+}
+
+function generateBoard() {
+  if (!gameBoard) return;
+
+  gameBoard.innerHTML = "";
   letters.forEach((letter) => {
     const cell = document.createElement("div");
-    cell.classList.add("board-cell");
+    cell.className = "board-cell";
     cell.textContent = letter;
-    cell.setAttribute("data-letter", letter);
+    cell.dataset.letter = letter;
 
-    // Adicionar evento de clique
+    if (Math.random() < 0.1) {
+      cell.classList.add("bonus");
+      cell.dataset.bonus = "2x";
+    }
+
     cell.addEventListener("click", () => {
       addLetter(letter);
       cell.classList.add("selected");
@@ -44,18 +99,9 @@ function generateBoard() {
   });
 }
 
-// Funções de controle da palavra
 function addLetter(letter) {
   currentWord += letter;
   updateWordDisplay();
-}
-
-function deleteLastLetter() {
-  if (currentWord.length > 0) {
-    currentWord = currentWord.slice(0, -1);
-    updateWordDisplay();
-    updateBoardHighlight();
-  }
 }
 
 function resetWord() {
@@ -64,44 +110,83 @@ function resetWord() {
   updateBoardHighlight();
 }
 
-function submitWord() {
-  if (currentWord.length > 0) {
-    alert(`Palavra enviada: ${currentWord}`);
-    updateScore(currentWord); // Atualiza a pontuação com base na palavra
-    resetWord();
-  } else {
-    alert("Nenhuma palavra formada!");
-  }
-}
-
-// Atualizar pontuação
-function updateScore(word) {
-  let points = 0;
-  for (let letter of word) {
-    points += letterScores[letter.toUpperCase()] || 0; // Atribui a pontuação com base na letra
-  }
-  score += points;
-  scoreDisplay.textContent = `Pontuação: ${score}`;
-}
-
-// Atualizar exibição da palavra
 function updateWordDisplay() {
-  currentWordDisplay.textContent = currentWord;
+  if (currentWordDisplay) currentWordDisplay.textContent = currentWord || "_";
 }
 
-// Remover seleção das células
 function updateBoardHighlight() {
-  const cells = document.querySelectorAll(".board-cell");
-  cells.forEach((cell) => {
-    if (currentWord.includes(cell.getAttribute("data-letter"))) {
-      cell.classList.add("selected");
-    } else {
-      cell.classList.remove("selected");
-    }
+  document.querySelectorAll(".board-cell").forEach((cell) => {
+    cell.classList.remove("selected");
   });
 }
 
-// Eventos dos botões
-submitButton.addEventListener("click", submitWord);
-deleteButton.addEventListener("click", deleteLastLetter);
-resetButton.addEventListener("click", resetWord);
+function submitWord() {
+  if (!currentWord) {
+    alert("Nenhuma palavra formada!");
+    return;
+  }
+
+  // Aceitar todas as palavras sem validação
+  updateScore(currentWord);
+  resetWord();
+}
+
+function updateScore(word) {
+  let points = 0;
+  word.split("").forEach((letter) => {
+    points += letterScores[letter.toUpperCase()] || 0;
+  });
+
+  document.querySelectorAll(".selected").forEach((cell) => {
+    if (cell.dataset.bonus === "2x") {
+      points *= 2;
+    }
+  });
+
+  score += points;
+  if (scoreDisplay) scoreDisplay.textContent = `Pontuação: ${score}`;
+}
+
+function animateClock(clockId, highlightCurrentHour, remainingTime) {
+  const clock = document.getElementById(clockId);
+  if (!clock) {
+    console.warn(`Elemento #${clockId} não encontrado.`);
+    return;
+  }
+
+  const hourHand = clock.querySelector(".hour-hand");
+  const minuteHand = clock.querySelector(".minute-hand");
+
+  if (!hourHand || !minuteHand) return;
+
+  const totalSeconds = 30;
+  const elapsedTime = totalSeconds - remainingTime;
+  const percentageElapsed = elapsedTime / totalSeconds;
+
+  const minuteAngle = 360 * percentageElapsed;
+  const hourAngle = minuteAngle / 12;
+
+  minuteHand.style.transform = `rotate(${minuteAngle}deg)`;
+  hourHand.style.transform = `rotate(${hourAngle}deg)`;
+}
+
+// Função corrigida para atualizar o relógio digital
+function updateDigitalClock() {
+  if (!digitalClock) return;
+
+  const currentDate = new Date();
+
+  // Ajustar para o fuso horário desejado
+  const timeZoneOffset = 1; // GMT+1, altere conforme necessário
+  currentDate.setHours(currentDate.getHours() + timeZoneOffset);
+
+  const hours = currentDate.getHours();
+  const minutes = currentDate.getMinutes();
+
+  digitalClock.textContent = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
+
+  // Atualiza o relógio a cada minuto
+  setTimeout(updateDigitalClock, 60000);
+}
