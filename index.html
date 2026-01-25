@@ -2,12 +2,12 @@
 <html lang="pt">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tabuleiro Ouija</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HEADER + MENU EXTERNO -->
+  <!-- HEADER + MENU -->
   <header>
     <div class="menu-icon" id="menuIcon">
       <span></span>
@@ -16,139 +16,103 @@
     </div>
 
     <nav class="menu" id="menu">
-      <ul>
-        <!-- Exemplos; substitui/expande com o teu catálogo completo -->
-        <li><a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos" class="menu-item">Alquimia dos Sentimentos</a></li>
-        <li><a href="https://alexxanorafa.github.io/Almas-Conectadas" class="menu-item">Almas Conectadas</a></li>
-        <li><a href="https://alexxanorafa.github.io/Tabuleiro-Quantico" class="menu-item">Tabuleiro Quântico</a></li>
-        <li><a href="https://alexxanorafa.github.io/TarodeMarselha" class="menu-item">Tarô de Marselha</a></li>
+      <ul class="menu-items" id="menuItems">
+        <li data-category="sentiment"><a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos/" class="menu-item">Alquimia dos Sentimentos</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a></li>
+        <li data-category="sentiment"><a href="https://alexxanorafa.github.io/ANIMA/" class="menu-item">ANIMA</a></li>
+        <li data-category="sentiment"><a href="https://alexxanorafa.github.io/ANIMA-II/" class="menu-item">ANIMA II</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/Animais-de-Poder/" class="menu-item">Animais de Poder</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/Arvore-da-Vida/" class="menu-item">Árvore da Vida</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Biblioteca-Onirica/" class="menu-item">Biblioteca Onírica</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Buzios/" class="menu-item">Búzios</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Cartas-de-Sibila/" class="menu-item">Cartas de Sibila</a></li>
+        <li data-category="sentiment"><a href="https://alexxanorafa.github.io/Do-you-love-me/" class="menu-item">Do you love me?</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/ECO-SAPIENS/" class="menu-item">ECO-SAPIENS</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Entrecamadas-Telepatia-Proposito/" class="menu-item">Entrecamadas</a></li>
+        <li data-category="sentiment"><a href="https://alexxanorafa.github.io/Experiencia-Sensorial/" class="menu-item">Experiência Sensorial</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/I-Ching-Virtual/" class="menu-item">I Ching Virtual</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/Jornada-Arquetipica/" class="menu-item">Jornada Arquetípica</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/Jornadas-Mitologica/" class="menu-item">Jornada Mitológica</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Livro-das-Sombras/" class="menu-item">Livro das Sombras</a></li>
+        <li data-category="sentiment"><a href="https://alexxanorafa.github.io/Magia-das-Cores/" class="menu-item">Magia das Cores</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Murmurios-do-Destino/" class="menu-item">Murmúrios do Destino</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Nexus/" class="menu-item">Nexus</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Oraculo-das-Pedras/" class="menu-item">Oráculo das Pedras</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Oraculo-dos-Deuses/" class="menu-item">Oráculo dos Deuses</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Oraculo-Numerologico/" class="menu-item">Oráculo Numerológico</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Pendulo-Divinatorio/" class="menu-item">Pêndulo Divinatório</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Portal-das-Almas/" class="menu-item">Portal das Almas</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Potencial-Coletivo/" class="menu-item">Potencial Coletivo</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/PROJECT-AETHER/" class="menu-item">PROJECT AETHER</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Quantum-Oracle/" class="menu-item">Quantum Oracle</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Runas-Celtas/" class="menu-item">Runas Celtas</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Runas-Estelares/" class="menu-item">Runas Estelares</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas Nórdicas</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Simulador-Quantico/" class="menu-item">Simulador Quântico</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quântico</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a></li>
+        <li data-category="oracle"><a href="https://alexxanorafa.github.io/Tasseografia/" class="menu-item">Tasseografia</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/The-Da-Vinci-Code/" class="menu-item">The Da Vinci Code</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Velvet-Quantum/" class="menu-item">Velvet Quantum</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Vitruvian-Resonance/" class="menu-item">Vitruvian Resonance</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Whispering-Shadows/" class="menu-item">Whispering Shadows</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Whispering-Shadows-2/" class="menu-item">Whispering Shadows 2</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Whispering-Shadows-3/" class="menu-item">Whispering Shadows 3</a></li>
+        <li data-category="myth"><a href="https://alexxanorafa.github.io/Xamanismo-Animal/" class="menu-item">Xamanismo Animal</a></li>
       </ul>
     </nav>
   </header>
 
-  <main class="app">
-    <!-- Cabeçalho dentro da app -->
-    <section class="app-header">
-      <h1>Tabuleiro Ouija · Experiência Ideomotora</h1>
-      <p class="app-subtitle">
-        Movimento da planchette baseado em modelo físico–estocástico e campo ideomotor,
-        ligado a princípios filosóficos, sem alegações sobrenaturais.
-      </p>
-    </section>
+  <main>
+    <h1>Tabuleiro Ouija</h1>
+    <h2>Experiência ideomotora · simbólica, não sobrenatural</h2>
 
-    <!-- TABULEIRO, centro do viewport -->
-    <section class="board-section">
-      <div class="ouija-board" id="board">
-        <svg id="boardMap" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-          <!-- Letras linha superior -->
-          <g class="row row-letters-top">
-            <text x="5"  y="20" data-char="A">A</text>
-            <text x="12" y="20" data-char="B">B</text>
-            <text x="19" y="20" data-char="C">C</text>
-            <text x="26" y="20" data-char="D">D</text>
-            <text x="33" y="20" data-char="E">E</text>
-            <text x="40" y="20" data-char="F">F</text>
-            <text x="47" y="20" data-char="G">G</text>
-            <text x="54" y="20" data-char="H">H</text>
-            <text x="61" y="20" data-char="I">I</text>
-            <text x="68" y="20" data-char="J">J</text>
-            <text x="75" y="20" data-char="K">K</text>
-            <text x="82" y="20" data-char="L">L</text>
-            <text x="89" y="20" data-char="M">M</text>
-          </g>
+    <!-- TABULEIRO -->
+    <div class="ouija-board">
+      <div class="board-frame">
+        <div class="symbols">
+          <span>☾</span>
+          <span>✶</span>
+          <span>☀</span>
+        </div>
 
-          <!-- Letras linha inferior -->
-          <g class="row row-letters-bottom">
-            <text x="9"  y="35" data-char="N">N</text>
-            <text x="16" y="35" data-char="O">O</text>
-            <text x="23" y="35" data-char="P">P</text>
-            <text x="30" y="35" data-char="Q">Q</text>
-            <text x="37" y="35" data-char="R">R</text>
-            <text x="44" y="35" data-char="S">S</text>
-            <text x="51" y="35" data-char="T">T</text>
-            <text x="58" y="35" data-char="U">U</text>
-            <text x="65" y="35" data-char="V">V</text>
-            <text x="72" y="35" data-char="W">W</text>
-            <text x="79" y="35" data-char="X">X</text>
-            <text x="86" y="35" data-char="Y">Y</text>
-            <text x="93" y="35" data-char="Z">Z</text>
-          </g>
+        <div class="letters">
+          <div>A B C D E F G H I J K L M</div>
+          <div>N O P Q R S T U V W X Y Z</div>
+        </div>
 
-          <!-- Números -->
-          <g class="row row-numbers">
-            <text x="10" y="55" data-char="1">1</text>
-            <text x="20" y="55" data-char="2">2</text>
-            <text x="30" y="55" data-char="3">3</text>
-            <text x="40" y="55" data-char="4">4</text>
-            <text x="50" y="55" data-char="5">5</text>
-            <text x="60" y="55" data-char="6">6</text>
-            <text x="70" y="55" data-char="7">7</text>
-            <text x="80" y="55" data-char="8">8</text>
-            <text x="90" y="55" data-char="9">9</text>
-          </g>
+        <div class="numbers">
+          <div>1 2 3 4 5 6 7 8 9 0</div>
+        </div>
 
-          <g class="row row-numbers-zero">
-            <text x="50" y="65" data-char="0">0</text>
-          </g>
-
-          <!-- SIM / NÃO -->
-          <g class="row row-yes-no">
-            <text x="15" y="75" data-char="SIM">SIM</text>
-            <text x="85" y="75" data-char="NAO">NÃO</text>
-          </g>
-
-          <!-- ADEUS -->
-          <g class="row row-goodbye">
-            <text x="50" y="88" data-char="ADEUS">ADEUS</text>
-          </g>
-        </svg>
-
-        <!-- Planchette controlada por JS -->
-        <div id="planchette" class="planchette"></div>
+        <div class="words">
+          <div class="yes-no">
+            <span>SIM</span>
+            <span>NÃO</span>
+          </div>
+          <div class="goodbye">ADEUS</div>
+        </div>
       </div>
-    </section>
+    </div>
 
-    <!-- BARRA INFERIOR DE INTERAÇÃO -->
-    <section class="control-section">
-      <div class="interaction">
-        <input
-          type="text"
-          id="question"
-          autocomplete="off"
-          placeholder="Escreve a tua pergunta..."
-        />
-        <button id="askButton">Perguntar</button>
-        <button id="metricsToggle">Detalhes</button>
-      </div>
-    </section>
+    <!-- LUPA / PLANCHETTE -->
+    <div class="planchette">◎</div>
+
+    <!-- INTERAÇÃO -->
+    <div class="interaction">
+      <input
+        type="text"
+        id="question"
+        autocomplete="off"
+        placeholder="Escreve a tua pergunta..."
+      />
+      <button id="askButton">Perguntar</button>
+      <div id="response"></div>
+    </div>
   </main>
-
-  <!-- OVERLAY DE RESULTADO (CINEMATOGRÁFICO) -->
-  <div class="result-overlay" id="resultOverlay">
-    <div class="result-card">
-      <div class="result-symbol-type" id="symbolType">virtude</div>
-      <div class="result-symbol-name" id="symbolName">Nome do Símbolo</div>
-      <p class="result-principle" id="symbolPrinciple">
-        Princípio filosófico associado ao símbolo.
-      </p>
-      <p class="result-prompt" id="symbolPrompt">
-        Pergunta de reflexão ou convite à ação.
-      </p>
-    </div>
-  </div>
-
-  <!-- OVERLAY DE MÉTRICAS CIENTÍFICAS -->
-  <div class="metrics-overlay" id="metricsOverlay">
-    <div class="metrics-card">
-      <div class="metrics-card-header">
-        <div class="metrics-card-title">Detalhes Científicos</div>
-        <button class="metrics-close" onclick="document.getElementById('metricsOverlay').classList.remove('visible')">
-          fechar
-        </button>
-      </div>
-      <div class="metrics-content" id="metricsContent"></div>
-    </div>
-  </div>
 
   <script src="script.js"></script>
 </body>
