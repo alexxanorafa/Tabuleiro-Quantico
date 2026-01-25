@@ -1,16 +1,14 @@
 // ===============================
-// Tabuleiro Ouija · Motor + Cinematografia + Símbolos
+// Tabuleiro Ouija · Motor + Cinematografia + Símbolos + Palavra desenhada
 // ===============================
 //
 // Estados de UI:
-// - idle      : tabuleiro à espera, tudo disponível.
-// - thinking  : pergunta enviada, UI recolhe, clima muda.
-// - moving    : planchette em movimento, foco no tabuleiro.
-// - reveal    : overlay de símbolo/princípio ocupa o ecrã.
-// - post      : estado após revelação; podes voltar a perguntar.
-//
-// Layout pensado para full viewport, sem sidebars nem scroll interno.
-// Scroll só em menus/overlays, se existirem.
+// - idle      : tabuleiro à espera.
+// - thinking  : pergunta enviada, pausa breve.
+// - moving    : planchette em movimento “exploratório” (câmara lenta).
+// - tracing   : planchette desenha uma palavra letra a letra.
+// - reveal    : overlay de símbolo/princípio.
+// - post      : pós-revelação.
 //
 // Requer no HTML:
 // - #menuIcon, #menu, .menu-item
@@ -61,7 +59,6 @@ const planchetteEl = document.getElementById("planchette");
 const questionInput = document.getElementById("question");
 const askButton = document.getElementById("askButton");
 
-// Overlays de resultado e métricas
 const resultOverlay = document.getElementById("resultOverlay");
 const symbolNameEl = document.getElementById("symbolName");
 const symbolTypeEl = document.getElementById("symbolType");
@@ -76,9 +73,9 @@ const metricsContentEl = document.getElementById("metricsContent");
 // 3. ESTADO GLOBAL
 // ===============================
 
-let uiState = "idle"; // idle | thinking | moving | reveal | post
+let uiState = "idle"; // idle | thinking | moving | tracing | reveal | post
 
-let targets = []; // { char, x, y }
+let targets = [];     // { char, x, y }
 let probDistrib = []; // { char, p }
 
 let state = {
@@ -93,6 +90,11 @@ let startTime = null;
 let animating = false;
 
 let currentEnv = getEnvironmentContext();
+
+// para fase de desenho da palavra
+let tracingPath = [];      // array de alvos na sequência da palavra
+let tracingIndex = 0;      // índice da letra atual
+let tracingActive = false; // se estamos a desenhar palavra
 
 // ===============================
 // 4. CONTEXTO AMBIENTAL
@@ -147,7 +149,7 @@ function initBoard() {
 }
 
 // ===============================
-// 6. POSICIONAMENTO DA PLANCHETTE (VIEWPORT)
+// 6. POSICIONAMENTO DA PLANCHETTE
 // ===============================
 
 function updatePlanchettePosition() {
@@ -162,7 +164,7 @@ function updatePlanchettePosition() {
 }
 
 // ===============================
-// 7. ESTADO DE UI (CINEMATOGRAFIA)
+// 7. ESTADO DE UI
 // ===============================
 
 function setUIState(newState) {
@@ -181,11 +183,13 @@ function setUIState(newState) {
     case "moving":
       hideResultOverlay();
       break;
+    case "tracing":
+      hideResultOverlay();
+      break;
     case "reveal":
       showResultOverlay();
       break;
     case "post":
-      // estado após o reveal; mantemos overlay visível
       break;
   }
 }
@@ -251,7 +255,7 @@ function updateProbabilityFromField(field) {
 }
 
 // ===============================
-// 10. MODELO FÍSICO: DINÂMICA ESTOCÁSTICA
+// 10. MODELO FÍSICO: DINÂMICA ESTOCÁSTICA (CÂMARA LENTA)
 // ===============================
 
 function stepDynamics(currentState, field, env) {
@@ -286,8 +290,8 @@ function stepDynamics(currentState, field, env) {
   fx += noiseAmp * (Math.random() - 0.5);
   fy += noiseAmp * (Math.random() - 0.5);
 
-  const dt = 0.03;
-  const gamma = 0.9;
+  const dt = 0.015; // câmara mais lenta
+  const gamma = 0.93;
 
   let vx = gamma * (currentState.vx + fx * dt);
   let vy = gamma * (currentState.vy + fy * dt);
@@ -318,43 +322,50 @@ function closestTarget(currentState) {
 const simbolos = {
   A: {
     tipo: "runa",
-    nome: "Ansuz · Eco da Palavra",
+    nome: "ANSUZ",
+    fullName: "Ansuz · Eco da Palavra",
     principio: "Clarifica a tua pergunta e escuta com atenção antes de agir.",
     prompt: "Que parte desta situação ainda não ouviste realmente?"
   },
   B: {
     tipo: "arcano",
-    nome: "O Louco · Primeiro Passo",
+    nome: "LOUCO",
+    fullName: "O Louco · Primeiro Passo",
     principio: "Aceita que não sabes tudo e começa mesmo assim, com humildade.",
     prompt: "Que pequeno risco podes assumir sem trair os teus valores?"
   },
   C: {
     tipo: "virtude",
-    nome: "Coragem Serena",
+    nome: "CORAGEM",
+    fullName: "Coragem Serena",
     principio: "Coragem é avançar apesar do medo, com responsabilidade.",
     prompt: "Onde podes agir hoje com coragem, mas sem impulsividade?"
   },
   D: {
     tipo: "virtude",
-    nome: "Discernimento",
+    nome: "DISCERNIR",
+    fullName: "Discernimento",
     principio: "Separa o que controlas do que não controlas e foca-te no primeiro.",
     prompt: "O que depende de ti, concretamente, nesta questão?"
   },
   SIM: {
     tipo: "virtude",
-    nome: "Compromisso",
+    nome: "SIM",
+    fullName: "Compromisso",
     principio: "Dizer 'sim' é assumir responsabilidade pelo que vem a seguir.",
     prompt: "Estás pronto para lidar com as consequências deste 'sim'?"
   },
   NAO: {
     tipo: "virtude",
-    nome: "Limites Saudáveis",
+    nome: "NAO",
+    fullName: "Limites Saudáveis",
     principio: "Dizer 'não' é proteger tempo, energia e integridade.",
     prompt: "O que ganhas se disseres 'não' com honestidade?"
   },
   ADEUS: {
     tipo: "virtude",
-    nome: "Desapego",
+    nome: "ADEUS",
+    fullName: "Desapego",
     principio: "Saber terminar é tão importante quanto saber começar.",
     prompt: "O que já cumpriu o seu papel e pode ser deixado para trás?"
   }
@@ -363,36 +374,40 @@ const simbolos = {
 function getSymbolForChar(char) {
   return simbolos[char] || {
     tipo: "reflexão",
-    nome: "Pausa",
+    nome: "PAUSA",
+    fullName: "Pausa",
     principio: "Talvez a questão precise de mais formulação antes de procurar resposta.",
     prompt: "Como reformularias a tua pergunta de forma mais clara?"
   };
 }
 
+// converte a palavra do símbolo em sequência de alvos
+function getTracingPathForSymbol(symbol) {
+  const word = (symbol.nome || "").toUpperCase();
+  const chars = word.split("");
+  const path = [];
+  for (const ch of chars) {
+    const t = targets.find((t) => t.char === ch);
+    if (t) path.push(t);
+  }
+  return path;
+}
+
 // ===============================
-// 12. HOOKS DE TEMA VISUAL
+// 12. HOOKS DE TEMA VISUAL (placeholders)
 // ===============================
-//
-// Aqui só definimos a API; a implementação de efeitos fica para CSS/JS extra.
-//
 
 const temaHooks = {
-  onStart: (question, field, env) => {
-    // Ex.: adicionar classe no body para mudar iluminação, etc.
-  },
-  onStep: (state, nearest, field, prob) => {
-    // Ex.: atualizar “lupa”, halos, etc.
-  },
-  onConverge: (finalTarget, metrics, symbolInfo) => {
-    // Ex.: animação de portal/halo, etc.
-  }
+  onStart: (question, field, env) => {},
+  onStep: (state, nearest, field, prob) => {},
+  onConverge: (finalTarget, metrics, symbolInfo) => {}
 };
 
 // ===============================
-// 13. LOOP DE ANIMAÇÃO
+// 13. LOOP DE ANIMAÇÃO EXPLORATÓRIA (MOVING)
 // ===============================
 
-function animate(field) {
+function animateExploration(field) {
   if (!animating) return;
 
   if (!startTime) {
@@ -413,48 +428,105 @@ function animate(field) {
   const { target: nearest, d } = closestTarget(state);
   temaHooks.onStep(state, nearest, field, probDistrib);
 
-  const minSteps = 90;
-  const threshold = 0.038;
+  const minSteps = 180;  // mais longa, câmara lenta
+  const threshold = 0.035;
 
   if (trajectory.length > minSteps && d < threshold) {
     animating = false;
-    showResult(nearest);
+    // ao invés de revelar já, entramos em fase de "tracing" da palavra
+    startTracing(nearest);
     return;
   }
 
-  requestAnimationFrame(() => animate(field));
+  requestAnimationFrame(() => animateExploration(field));
 }
 
 // ===============================
-// 14. OVERLAYS (RESULTADO E MÉTRICAS)
+// 14. FASE DE DESENHO DA PALAVRA (TRACING)
+// ===============================
+
+function startTracing(finalTarget) {
+  const symbol = getSymbolForChar(finalTarget.char);
+  tracingPath = getTracingPathForSymbol(symbol);
+  tracingIndex = 0;
+  tracingActive = tracingPath.length > 0;
+
+  if (!tracingActive) {
+    // se não temos palavra, revelamos logo
+    showResult(finalTarget);
+    return;
+  }
+
+  setUIState("tracing");
+  animating = true;
+  startTime = null;
+  trajectory = [];
+
+  // usamos uma função específica de animação guiada por alvos da palavra
+  requestAnimationFrame(() => animateTracing(finalTarget, symbol));
+}
+
+function animateTracing(finalTarget, symbol) {
+  if (!animating || !tracingActive) {
+    showResult(finalTarget);
+    return;
+  }
+
+  if (tracingIndex >= tracingPath.length) {
+    animating = false;
+    tracingActive = false;
+    showResult(finalTarget);
+    return;
+  }
+
+  const currentTarget = tracingPath[tracingIndex];
+
+  // campo de ativação focado na letra atual da palavra
+  const field = targets.map((t) => {
+    let w = 0.5;
+    if (t.char === currentTarget.char) w = 6; // reforço forte
+    return { ...t, w };
+  });
+
+  state = stepDynamics(state, field, currentEnv);
+  updatePlanchettePosition();
+
+  const d = Math.hypot(currentTarget.x - state.x, currentTarget.y - state.y);
+  const closeThreshold = 0.03;
+
+  if (d < closeThreshold) {
+    tracingIndex += 1;
+    // pequena pausa entre letras
+    setTimeout(() => {
+      requestAnimationFrame(() => animateTracing(finalTarget, symbol));
+    }, 250);
+  } else {
+    requestAnimationFrame(() => animateTracing(finalTarget, symbol));
+  }
+}
+
+// ===============================
+// 15. OVERLAYS
 // ===============================
 
 function showResultOverlay() {
-  if (resultOverlay) {
-    resultOverlay.classList.add("visible");
-  }
+  if (resultOverlay) resultOverlay.classList.add("visible");
 }
 
 function hideResultOverlay() {
-  if (resultOverlay) {
-    resultOverlay.classList.remove("visible");
-  }
+  if (resultOverlay) resultOverlay.classList.remove("visible");
 }
 
 function showMetricsOverlay() {
-  if (metricsOverlay) {
-    metricsOverlay.classList.add("visible");
-  }
+  if (metricsOverlay) metricsOverlay.classList.add("visible");
 }
 
 function hideMetricsOverlay() {
-  if (metricsOverlay) {
-    metricsOverlay.classList.remove("visible");
-  }
+  if (metricsOverlay) metricsOverlay.classList.remove("visible");
 }
 
 // ===============================
-// 15. APRESENTAÇÃO DO RESULTADO
+// 16. APRESENTAÇÃO DO RESULTADO
 // ===============================
 
 function showResult(finalTarget) {
@@ -469,16 +541,17 @@ function showResult(finalTarget) {
 
   const symbol = getSymbolForChar(finalTarget.char);
 
-  if (symbolNameEl) symbolNameEl.textContent = symbol.nome;
+  if (symbolNameEl) symbolNameEl.textContent = symbol.fullName;
   if (symbolTypeEl) symbolTypeEl.textContent = symbol.tipo;
   if (symbolPrincipleEl) symbolPrincipleEl.textContent = symbol.principio;
   if (symbolPromptEl) symbolPromptEl.textContent = symbol.prompt;
 
   const metricsLines = [
     `Letra/campo final: ${finalTarget.char}`,
-    `Tipo de símbolo: ${symbol.tipo}`,
+    `Símbolo: ${symbol.nome}`,
+    `Tipo: ${symbol.tipo}`,
     "",
-    `Tempo total: ${timeTotal.toFixed(0)} ms`,
+    `Tempo total (exploração): ${timeTotal.toFixed(0)} ms`,
     `Comprimento da trajetória: ${length.toFixed(3)} unidades normalizadas`,
     `Passos: ${trajectory.length}`,
     `Coordenadas finais: (${finalTarget.x.toFixed(3)}, ${finalTarget.y.toFixed(3)})`,
@@ -486,9 +559,7 @@ function showResult(finalTarget) {
     `Timezone: ${currentEnv.timezone}`
   ];
 
-  if (metricsContentEl) {
-    metricsContentEl.textContent = metricsLines.join("\n");
-  }
+  if (metricsContentEl) metricsContentEl.textContent = metricsLines.join("\n");
 
   setUIState("reveal");
 
@@ -502,12 +573,11 @@ function showResult(finalTarget) {
     symbol
   );
 
-  // Após pequena pausa, passamos a "post"
   setTimeout(() => setUIState("post"), 800);
 }
 
 // ===============================
-// 16. HANDLER DA PERGUNTA
+// 17. HANDLER DA PERGUNTA
 // ===============================
 
 function onAskClick() {
@@ -526,6 +596,10 @@ function onAskClick() {
   setUIState("thinking");
 
   animating = false;
+  tracingActive = false;
+  tracingPath = [];
+  tracingIndex = 0;
+
   state.x = 0.5;
   state.y = 0.5;
   state.vx = 0;
@@ -543,12 +617,12 @@ function onAskClick() {
 
   setTimeout(() => {
     setUIState("moving");
-    requestAnimationFrame(() => animate(field));
-  }, 500); // pequena pausa de suspense antes do movimento
+    requestAnimationFrame(() => animateExploration(field));
+  }, 500);
 }
 
 // ===============================
-// 17. METRICS TOGGLE
+// 18. METRICS TOGGLE
 // ===============================
 
 if (metricsToggle && metricsOverlay) {
@@ -562,7 +636,7 @@ if (metricsToggle && metricsOverlay) {
 }
 
 // ===============================
-// 18. RESPONSIVIDADE E BOOT
+// 19. RESPONSIVIDADE E BOOT
 // ===============================
 
 window.addEventListener("resize", () => {
