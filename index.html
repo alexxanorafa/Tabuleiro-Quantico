@@ -7,16 +7,19 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- HEADER + MENU -->
+
   <header>
     <div class="menu-icon" id="menuIcon">
       <span></span>
       <span></span>
       <span></span>
     </div>
+  </header>
 
-    <nav class="menu" id="menu">
-      <ul class="menu-items" id="menuItems">
+  <nav class="menu-overlay" id="menu">
+    <div class="menu-content">
+      <h3>Portais</h3>
+      <ul class="menu-items">
         <li data-category="sentiment"><a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos/" class="menu-item">Alquimia dos Sentimentos</a></li>
         <li data-category="quantum"><a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a></li>
         <li data-category="myth"><a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a></li>
@@ -51,7 +54,7 @@
         <li data-category="oracle"><a href="https://alexxanorafa.github.io/Runas-Estelares/" class="menu-item">Runas Estelares</a></li>
         <li data-category="oracle"><a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas Nórdicas</a></li>
         <li data-category="quantum"><a href="https://alexxanorafa.github.io/Simulador-Quantico/" class="menu-item">Simulador Quântico</a></li>
-        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quântico</a></li>
+        <li data-category="quantum"><a href="https://alexxanorafa.github.io/Tabuleiro-Ouija/" class="menu-item">Tabuleiro Ouija</a></li>
         <li data-category="oracle"><a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a></li>
         <li data-category="oracle"><a href="https://alexxanorafa.github.io/Tasseografia/" class="menu-item">Tasseografia</a></li>
         <li data-category="quantum"><a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a></li>
@@ -63,16 +66,17 @@
         <li data-category="quantum"><a href="https://alexxanorafa.github.io/Whispering-Shadows-3/" class="menu-item">Whispering Shadows 3</a></li>
         <li data-category="myth"><a href="https://alexxanorafa.github.io/Xamanismo-Animal/" class="menu-item">Xamanismo Animal</a></li>
       </ul>
-    </nav>
-  </header>
+    </div>
+  </nav>
 
   <main>
     <h1>Tabuleiro Ouija</h1>
-    <h2>Experiência ideomotora · simbólica, não sobrenatural</h2>
+    <h2>Interface Ideomotora & Biofeedback</h2>
 
-    <!-- TABULEIRO -->
     <div class="ouija-board">
       <div class="board-frame">
+        <canvas id="trajectoryCanvas"></canvas>
+
         <div class="symbols">
           <span>☾</span>
           <span>✶</span>
@@ -98,18 +102,16 @@
       </div>
     </div>
 
-    <!-- LUPA / PLANCHETTE -->
     <div class="planchette">◎</div>
 
-    <!-- INTERAÇÃO -->
     <div class="interaction">
       <input
         type="text"
         id="question"
         autocomplete="off"
-        placeholder="Escreve a tua pergunta..."
+        placeholder="Formula a tua questão..."
       />
-      <button id="askButton">Perguntar</button>
+      <button id="askButton">Iniciar Sessão</button>
       <div id="response"></div>
     </div>
   </main>

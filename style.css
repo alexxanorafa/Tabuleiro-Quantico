@@ -1,9 +1,7 @@
 :root {
-  /* Paleta principal */
   --bg-body: #060508;
   --bg-board: #111018;
   --bg-board-inner: #171421;
-  --bg-paper: #1d191f;
   --border-gold: #e4c89a;
   --border-gold-soft: #b2946a;
   --accent-gold: #f6d49c;
@@ -11,32 +9,16 @@
   --accent-muted: #b9adbf;
   --shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.95);
   --shadow-soft: 0 16px 36px rgba(0, 0, 0, 0.75);
-
   --font-main: "Times New Roman", Georgia, serif;
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
-
-  --radius-soft: 16px;
   --radius-board: 22px;
-
-  --transition-fast: 0.18s ease-out;
   --transition-med: 0.28s ease-out;
 }
 
-/* Reset básico */
-
-*,
-*::before,
-*::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+*, *::before, *::after {
+  margin: 0; padding: 0; box-sizing: border-box;
 }
 
-html,
-body {
-  height: 100%;
-}
+html, body { height: 100%; }
 
 body {
   font-family: var(--font-main);
@@ -46,453 +28,221 @@ body {
   color: var(--accent-ink);
   -webkit-font-smoothing: antialiased;
   padding: 20px;
-  padding-top: 80px; /* espaço para o header fixo */
+  padding-top: 80px;
+  overflow-x: hidden;
 }
 
-/* =========================
-   HEADER + MENU
-   ========================= */
-
-header {
-  position: fixed;
-  inset: 0 0 auto 0;
-  height: 60px;
-  background: linear-gradient(
-    to bottom,
-    rgba(6, 5, 8, 0.96),
-    rgba(6, 5, 8, 0.85),
-    transparent 100%
-  );
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0 20px;
-  z-index: 1000;
-  border-bottom: 1px solid rgba(228, 200, 154, 0.4);
-  backdrop-filter: blur(6px);
-}
-
-/* Ícone do menu */
-
+/* ============ MENU (OVERLAY TOTAL) ============ */
 .menu-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000; /* CAMADA SUPREMA: Sempre clicável */
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 22px;
+  width: 32px;
+  height: 24px;
   transition: transform 0.3s ease;
+  mix-blend-mode: difference; /* Garante visibilidade sobre qualquer fundo */
 }
 
 .menu-icon span {
   display: block;
   width: 100%;
-  height: 3px;
+  height: 2px;
   background: var(--accent-gold);
-  border-radius: 3px;
-  transition: 0.3s ease;
+  border-radius: 2px;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.menu-icon.active span:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
-}
+.menu-icon.active span:nth-child(1) { transform: translateY(11px) rotate(45deg); }
+.menu-icon.active span:nth-child(2) { opacity: 0; }
+.menu-icon.active span:nth-child(3) { transform: translateY(-11px) rotate(-45deg); }
 
-.menu-icon.active span:nth-child(2) {
+.menu-overlay {
+  position: fixed;
+  inset: 0; /* Top:0, Left:0, Right:0, Bottom:0 */
+  width: 100vw;
+  height: 100vh;
+  background: rgba(6, 5, 8, 0.95);
+  backdrop-filter: blur(15px);
+  z-index: 9999; /* CAMADA MUITO ALTA: Cobre tabuleiro e Lupa */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   opacity: 0;
+  pointer-events: none; /* Deixa clicar no que está atrás quando fechado */
+  transition: opacity 0.4s ease, backdrop-filter 0.4s ease;
 }
 
-.menu-icon.active span:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
-}
-
-/* Painel do menu */
-
-.menu {
-  display: none;
-  position: absolute;
-  top: -1500px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 86%;
-  max-width: 380px;
-  background: radial-gradient(circle at top, #201925 0, #0c090f 52%, #050307 100%);
-  border-radius: 18px;
-  border: 1px solid rgba(228, 200, 154, 0.65);
-  box-shadow: var(--shadow-deep);
-  padding: 14px 0;
-  opacity: 0;
-  transition: all 0.3s cubic-bezier(0.33, 0.12, 0.18, 0.98);
-  z-index: 1100;
-}
-
-.menu.active {
-  display: block;
-  top: 65px;
+.menu-overlay.active {
   opacity: 1;
+  pointer-events: all;
+}
+
+.menu-content {
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.menu-overlay.active .menu-content {
+  transform: translateY(0);
+}
+
+.menu-content h3 {
+  color: var(--accent-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(228, 200, 154, 0.3);
+  display: inline-block;
+  padding-bottom: 8px;
 }
 
 .menu-items {
   list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 0 14px;
   max-height: 70vh;
   overflow-y: auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-
-/* Scroll do menu */
-
-.menu-items::-webkit-scrollbar {
-  width: 6px;
-}
-.menu-items::-webkit-scrollbar-track {
-  background: transparent;
-}
-.menu-items::-webkit-scrollbar-thumb {
-  background: rgba(228, 200, 154, 0.4);
-  border-radius: 999px;
-}
+/* Scrollbar bonita para o menu */
+.menu-items::-webkit-scrollbar { width: 4px; }
+.menu-items::-webkit-scrollbar-track { background: transparent; }
+.menu-items::-webkit-scrollbar-thumb { background: var(--border-gold-soft); border-radius: 4px; }
 
 .menu-item {
-  background: #18131f;
-  border-radius: 999px;
-  min-height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
+  display: block;
+  font-size: 1.2rem;
   color: var(--accent-gold);
-  font-size: 0.85rem;
-  padding: 0 16px;
-  cursor: pointer;
-  position: relative;
-  border: 1px solid transparent;
-  transition: all 0.25s ease;
-}
-
-.menu-item::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(circle at center, rgba(246, 212, 156, 0.18) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.25s ease;
+  text-decoration: none;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+  opacity: 0.7;
 }
 
 .menu-item:hover {
-  background: var(--accent-gold);
-  color: #201015;
-  transform: translateY(-1px);
-  border-color: rgba(246, 212, 156, 0.9);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.8);
-}
-
-.menu-item:hover::before {
   opacity: 1;
+  transform: scale(1.05);
+  text-shadow: 0 0 10px rgba(246, 212, 156, 0.4);
 }
 
-/* Responsivo menu */
-
-@media (max-width: 768px) {
-  .menu-item {
-    min-height: 26px;
-    font-size: 0.78rem;
-    padding: 0 10px;
-  }
-}
-
-/* =========================
-   LAYOUT PRINCIPAL
-   ========================= */
-
-main {
-  max-width: 900px;
-  margin: 0 auto;
-}
+/* ============ LAYOUT ============ */
+main { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
 
 h1 {
-  text-align: center;
-  margin: 10px 0 6px;
-  font-size: 1.6rem;
-  color: var(--accent-gold);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-align: center; margin: 10px 0 6px; font-size: 1.6rem;
+  color: var(--accent-gold); letter-spacing: 0.14em; text-transform: uppercase;
 }
-
 h2 {
-  text-align: center;
-  margin-bottom: 18px;
-  font-size: 0.9rem;
-  color: var(--accent-muted);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  text-align: center; margin-bottom: 18px; font-size: 0.9rem;
+  color: var(--accent-muted); letter-spacing: 0.18em; text-transform: uppercase;
 }
 
-/* =========================
-   TABULEIRO OUIJA
-   ========================= */
-
+/* ============ TABULEIRO ============ */
 .ouija-board {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: min(100%, 640px);
-  height: 380px;
-  margin: 24px auto;
+  display: flex; justify-content: center; align-items: center; position: relative;
+  width: min(100%, 640px); height: 380px; margin: 24px auto;
   background: radial-gradient(circle at top, #251a2c 0, #0c090f 45%, #050308 100%);
   border-radius: var(--radius-board);
   box-shadow: var(--shadow-soft);
-  padding: 18px;
-  text-align: center;
+  padding: 18px; text-align: center;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(228, 200, 154, 0.6);
+  z-index: 10; /* Base do tabuleiro */
 }
-
-/* Moldura interna */
 
 .board-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: calc(var(--radius-board) - 6px);
-  padding: 16px;
-  background:
-    radial-gradient(circle at top, rgba(247, 220, 180, 0.1) 0, transparent 55%),
-    linear-gradient(135deg, rgba(9, 7, 13, 0.9), rgba(19, 16, 26, 0.98));
+  position: relative; width: 100%; height: 100%;
+  border-radius: calc(var(--radius-board) - 6px); padding: 16px;
+  background: radial-gradient(circle at top, rgba(247, 220, 180, 0.1) 0, transparent 55%),
+              linear-gradient(135deg, rgba(9, 7, 13, 0.9), rgba(19, 16, 26, 0.98));
   box-shadow: inset 0 0 0 1px rgba(228, 200, 154, 0.35);
+  overflow: hidden;
 }
 
-/* Símbolos (lua / sol / etc.) */
-
-.symbols {
-  display: flex;
-  justify-content: space-between;
-  font-size: 1.5rem;
-  color: var(--accent-gold);
-  margin-bottom: 6px;
+#trajectoryCanvas {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none; opacity: 0.6;
 }
 
-/* Letras, números, palavras */
-
-.letters,
-.numbers,
-.words {
-  font-size: 1.25rem;
-  color: var(--accent-gold);
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 6px;
+.symbols, .letters, .numbers, .words {
+  position: relative; z-index: 1; color: var(--accent-gold); font-weight: bold;
 }
 
-.letters div,
-.numbers div {
-  display: flex;
-  justify-content: center;
-  gap: 9px;
-  font-size: 1.1rem;
-  padding: 4px 0;
-}
+.symbols { display: flex; justify-content: space-between; font-size: 1.5rem; margin-bottom: 6px; }
+.letters, .numbers, .words { font-size: 1.25rem; text-align: center; margin-bottom: 6px; }
+.letters div, .numbers div { display: flex; justify-content: center; gap: 9px; font-size: 1.1rem; padding: 4px 0; }
+.words { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.yes-no { display: flex; justify-content: space-between; width: 80%; }
+.goodbye { font-size: 1.3rem; margin-top: 6px; }
 
-/* SIM / NÃO / ADEUS */
-
-.words {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.yes-no {
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-}
-
-.goodbye {
-  font-size: 1.3rem;
-  margin-top: 6px;
-}
-
-/* =========================
-   PLANCHETTE / LUPA
-   ========================= */
-
+/* ============ PLANCHETTE (LUPA) ============ */
 .planchette {
-  position: fixed; /* controlada via JS pelo rect da .ouija-board */
-  width: 42px;
-  height: 42px;
+  position: fixed;
+  width: 48px; height: 48px; /* Ligeiramente maior para impacto */
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 20%, #ffffff 0, #f5e4cf 35%, #c9a47a 80%);
+  background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.9) 0, rgba(245, 228, 207, 0.4) 40%, rgba(201, 164, 122, 0.2) 100%);
   border: 2px solid #20131c;
-  box-shadow:
-    0 0 0 1px rgba(246, 212, 156, 0.75),
-    0 8px 20px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 0 0 1px rgba(246, 212, 156, 0.75), 0 12px 30px rgba(0, 0, 0, 0.9);
   transform: translate(-50%, -50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  color: #20131c;
-  transition: transform 0.05s linear;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem; color: #20131c;
+  
+  z-index: 500; /* CAMADA ALTA, MAS ABAIXO DO MENU (9999) */
+  pointer-events: none;
+  backdrop-filter: blur(4px) hue-rotate(15deg); /* Efeito vidro na própria lente */
 }
 
-.planchette::before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 1px solid rgba(246, 212, 156, 0.35);
-  box-shadow:
-    0 0 18px rgba(246, 212, 156, 0.25),
-    0 0 32px rgba(0, 0, 0, 0.85);
+.planchette::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  width: 6px; height: 6px; background: rgba(255,0,0,0.4); border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
-/* =========================
-   INTERAÇÃO / PERGUNTA
-   ========================= */
-
+/* ============ INTERAÇÃO ============ */
 .interaction {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 16px;
-  gap: 8px;
+  display: flex; flex-direction: column; align-items: center; margin-top: 16px; gap: 8px;
+  position: relative; z-index: 10;
 }
 
 #question {
-  width: 80%;
-  max-width: 420px;
-  padding: 10px 14px;
-  border: 1px solid rgba(228, 200, 154, 0.7);
-  border-radius: 999px;
-  background: rgba(9, 7, 13, 0.9);
-  color: var(--accent-ink);
-  font-size: 0.95rem;
-  text-align: center;
-  outline: none;
-  transition: border-color var(--transition-med), box-shadow var(--transition-med),
-    background var(--transition-med);
+  width: 80%; max-width: 420px; padding: 12px 18px;
+  border: 1px solid rgba(228, 200, 154, 0.7); border-radius: 999px;
+  background: rgba(9, 7, 13, 0.9); color: var(--accent-ink);
+  font-size: 1rem; text-align: center; outline: none;
+  transition: all var(--transition-med);
 }
-
-#question::placeholder {
-  color: rgba(185, 173, 191, 0.75);
-}
-
-#question:focus {
-  border-color: var(--accent-gold);
-  box-shadow:
-    0 0 0 1px rgba(246, 212, 156, 0.55),
-    0 0 18px rgba(246, 212, 156, 0.25);
-  background: rgba(13, 10, 18, 0.98);
-}
+#question:focus { border-color: var(--accent-gold); box-shadow: 0 0 0 1px rgba(246, 212, 156, 0.55); }
 
 #askButton {
-  margin-top: 4px;
-  padding: 9px 22px;
+  margin-top: 4px; padding: 10px 24px;
   background: radial-gradient(circle at 30% 0, #f6d49c 0, #c59a64 45%, #7f5a38 100%);
-  color: #20131c;
-  font-size: 0.9rem;
-  border: none;
-  border-radius: 999px;
-  cursor: pointer;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-    filter var(--transition-fast);
+  color: #20131c; font-size: 0.9rem; font-weight: bold;
+  border: none; border-radius: 999px; cursor: pointer;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  transition: all var(--transition-fast);
 }
-
-#askButton:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.8);
-  filter: brightness(1.04);
-}
-
-#askButton:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-/* =========================
-   RESPOSTA
-   ========================= */
+#askButton:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0, 0, 0, 0.8); filter: brightness(1.1); }
 
 #response {
-  margin-top: 16px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 12px 16px;
+  margin-top: 16px; max-width: 520px; width: 90%; padding: 12px 16px;
   background: radial-gradient(circle at top, #241a2c 0, #130f19 60%, #09060d 100%);
-  border-radius: var(--radius-soft);
-  border: 1px solid rgba(228, 200, 154, 0.7);
-  color: var(--accent-ink);
-  text-align: center;
-  box-shadow: var(--shadow-soft);
-  min-height: 48px;
+  border-radius: var(--radius-soft); border: 1px solid rgba(228, 200, 154, 0.7);
+  color: var(--accent-ink); text-align: center; box-shadow: var(--shadow-soft);
+  min-height: 48px; display: flex; flex-direction: column; justify-content: center;
 }
-
-/* =========================
-   RESPONSIVO
-   ========================= */
 
 @media (max-width: 768px) {
-  body {
-    padding-inline: 14px;
-  }
-
-  .ouija-board {
-    width: 100%;
-    height: 320px;
-    padding: 14px;
-  }
-
-  .board-frame {
-    padding: 12px;
-  }
-
-  .letters,
-  .numbers,
-  .words {
-    font-size: 1.1rem;
-  }
-
-  .letters div,
-  .numbers div {
-    gap: 7px;
-    font-size: 1rem;
-  }
-
-  .planchette {
-    width: 36px;
-    height: 36px;
-    font-size: 1.3rem;
-  }
-
-  #question {
-    width: 90%;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 1.3rem;
-    letter-spacing: 0.12em;
-  }
-
-  h2 {
-    display: none;
-  }
-
-  .ouija-board {
-    height: 300px;
-    margin-top: 18px;
-  }
-
-  #response {
-    font-size: 0.9rem;
-    padding: 10px 12px;
-  }
+  .ouija-board { width: 100%; height: 320px; padding: 14px; }
+  .board-frame { padding: 12px; }
+  .letters div, .numbers div { gap: 7px; font-size: 1rem; }
+  .planchette { width: 40px; height: 40px; }
+  #question { width: 90%; }
 }
